@@ -1,0 +1,35 @@
+package Spawner
+
+public tuple bound(real low, real high)
+
+tuple payloadBridge(vec2 origin, vec2 destination, integer count, player owner, integer whichUnitCode)
+
+payloadBridge bridge
+
+function spawnUnits()
+  let g = CreateGroup()
+  let facing = bridge.origin.angleTo(bridge.destination)
+  for i = 0 to bridge.count
+    let lcu = CreateUnit(bridge.owner, bridge.whichUnitCode, bridge.origin.x, bridge.origin.y, facing.degrees())
+    g.addUnit(lcu)
+  g.pointOrder("attackmove", bridge.destination)
+
+public class RaceSpawner
+  trigger runner
+  integer whichUnitCode
+  player owner
+  vec2 origin
+  vec2 destination
+  integer count
+
+  construct(integer unitId, player playerId, bound range)
+    whichUnitCode = unitId
+    owner = playerId
+
+    runner = CreateTrigger()
+      ..registerTimerEvent(GetRandomReal(range.low, range.high), true)
+      ..addAction(function spawnUnits)
+
+  function triggerSpawn()
+    bridge = payloadBridge(origin, destination, count, owner, whichUnitCode)
+

@@ -1,0 +1,26 @@
+package CameraPanStart
+
+constant location humanLoc = udg_humanLoc
+constant location orcLoc = udg_orcLoc
+
+constant force orcForce = GetPlayersAllies(Player(0))
+constant force humanForce = GetPlayersAllies(Player(1))
+
+function cameraInit()
+  orcForce.forEach(() -> begin
+    SetCameraPositionLocForPlayer(GetEnumPlayer(), orcLoc)
+    // PanCameraToTimedLocForPlayer(GetEnumPlayer(), orcLoc, 0.01)
+  end)
+
+  humanForce.forEach(() -> begin
+    SetCameraPositionLocForPlayer(GetEnumPlayer(), humanLoc)
+    // PanCameraToTimedLocForPlayer(GetEnumPlayer(), humanLoc, 0.01)
+  end)
+
+  orcForce.destr()
+  humanForce.destr()
+
+init
+  CreateTrigger()
+    ..registerTimerEvent(0.00, false)
+    ..addAction(function cameraInit)

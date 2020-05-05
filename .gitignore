@@ -1,0 +1,6 @@
+/_build
+wurst.dependencies
+.vscode/settings.json
+temp/output.j
+compiled.j.txt
+wurst/war3map.j
