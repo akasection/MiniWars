@@ -1,0 +1,17 @@
+package HolyLight
+
+import ClosureEvents
+import ClosureForGroups
+
+constant HOLY_LIGHT = 'AHhb'
+constant TARGET_FX = "Abilities\\Spells\\Human\\Resurrect\\ResurrectTarget.mdl"
+constant AOE_FX = "Abilities\\Spells\\Undead\\OrbOfDeath\\OrbOfDeathMissile.mdl"
+
+init
+  EventListener.onTargetCast(HOLY_LIGHT) (unit caster, unit target) ->
+    flashEffect(TARGET_FX, target.getPos())
+    forNearestUnit(target.getPos(), 300., null) (unit u) ->
+      if u.isEnemyOf(caster.getOwner()) and u.isAlive() and not u.isType(UNIT_TYPE_STRUCTURE)
+        caster.damageTarget(target, 300. * (caster.getAbilityLevel(HOLY_LIGHT)), false, true, ATTACK_TYPE_MAGIC, DAMAGE_TYPE_DIVINE, WEAPON_TYPE_WHOKNOWS)
+        flashEffect(AOE_FX, u.getPos())
+

@@ -1,0 +1,40 @@
+package GenericHumanSpawner
+
+import RaceSpawner
+import HashMap
+
+public HashMap<integer, RaceSpawner> humanSpawners = new HashMap<integer, RaceSpawner>
+
+function initSpawners()
+  let human = Player(1)
+  let origin = vec2(GetLocationX(udg_humanLoc), GetLocationY(udg_humanLoc))
+  let destination = vec2(GetLocationX(udg_orcLoc), GetLocationY(udg_orcLoc))
+
+  /* Spawner registration */
+  // footman
+  humanSpawners.put('hfoo', new RaceSpawner('hfoo', human, bound(30., 37.), origin , destination, 6))
+  // Riflemen
+  humanSpawners.put('hrif', new RaceSpawner('hrif', human, bound(32., 45.), origin , destination, 2))
+  // Knight
+  humanSpawners.put('hkni', new RaceSpawner('hkni', human, bound(58., 65.), origin , destination, 1))
+  // Mortar Team
+  humanSpawners.put('hmtm', new RaceSpawner('hmtm', human, bound(85., 135.), origin , destination, 2))
+  // Flying Machine
+  humanSpawners.put('hgyr', new RaceSpawner('hgyr', human, bound(40., 75.), origin , destination, 5))
+  // Gryphon
+  humanSpawners.put('hgry', new RaceSpawner('hgry', human, bound(60., 125.), origin , destination, 2))
+  // Dragonhawk
+  humanSpawners.put('hdhw', new RaceSpawner('hdhw', human, bound(45., 95.), origin , destination, 2))
+  // Priest
+  humanSpawners.put('hmpr', new RaceSpawner('hmpr', human, bound(45., 70.), origin , destination, 3))
+  // Sorceress
+  humanSpawners.put('hsor', new RaceSpawner('hsor', human, bound(60., 144.), origin , destination, 2))
+  // Spell Breaker
+  humanSpawners.put('hspt', new RaceSpawner('hspt', human, bound(90., 110.), origin , destination, 2))
+  // Siege Engine
+  humanSpawners.put('hmtt', new RaceSpawner('hmtt', human, bound(90., 125.), origin , destination, 2))
+
+init
+  CreateTrigger()
+  ..registerTimerEvent(3., false)
+  ..addAction(function initSpawners)

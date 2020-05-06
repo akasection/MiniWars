@@ -1,0 +1,14 @@
+package ManaShield
+
+import ClosureEvents
+import ClosureTimers
+
+constant abilId = 'ANms'
+constant buffCode = 'BNms'
+init
+  EventListener.onCast(abilId) (unit caster) ->
+    let level = caster.getAbilityLevel(abilId)
+    let manaValue = caster.getMana()
+    caster.subMana(manaValue * .8)
+    doAfter((0.8 * manaValue) * (0.005 + (0.005 * level))) ->
+      caster.removeAbility(buffCode)

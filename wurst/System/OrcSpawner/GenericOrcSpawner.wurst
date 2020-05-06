@@ -1,0 +1,40 @@
+package GenericOrcSpawner
+
+import RaceSpawner
+import HashMap
+
+public HashMap<integer, RaceSpawner> orcSpawners = new HashMap<integer, RaceSpawner>
+
+function initSpawners()
+  let orc = Player(0)
+  let origin = vec2(GetLocationX(udg_orcLoc), GetLocationY(udg_orcLoc))
+  let destination = vec2(GetLocationX(udg_humanLoc), GetLocationY(udg_humanLoc))
+
+  /* Spawner registration */
+  // Grunt
+  orcSpawners.put('ogru', new RaceSpawner('ogru', orc, bound(32., 45.), origin , destination, 3))
+  // Troll
+  orcSpawners.put('otbk', new RaceSpawner('otbk', orc, bound(42., 55.), origin , destination, 2))
+  // Raider
+  orcSpawners.put('orai', new RaceSpawner('orai', orc, bound(50., 55.), origin , destination, 2))
+  // Wind Rider
+  orcSpawners.put('owyv', new RaceSpawner('owyv', orc, bound(65., 100.), origin , destination, 2))
+  // Bat Rider
+  orcSpawners.put('otbr', new RaceSpawner('otbr', orc, bound(37., 47.), origin , destination, 3))
+  // Shaman
+  orcSpawners.put('oshm', new RaceSpawner('oshm', orc, bound(45., 65.), origin , destination, 3))
+  // Witch Doctor
+  orcSpawners.put('odoc', new RaceSpawner('odoc', orc, bound(55., 90.), origin , destination, 2))
+  // Spirit Walker
+  orcSpawners.put('ospw', new RaceSpawner('ospw', orc, bound(90., 115.), origin , destination, 1))
+  // Kodo Beast
+  orcSpawners.put('okod', new RaceSpawner('okod', orc, bound(120., 125.), origin , destination, 2))
+  // Tauren
+  orcSpawners.put('otau', new RaceSpawner('otau', orc, bound(80., 120.), origin , destination, 1))
+  // Catapult
+  orcSpawners.put('ocat', new RaceSpawner('ocat', orc, bound(125., 160.), origin , destination, 2))
+
+init
+  CreateTrigger()
+  ..registerTimerEvent(3., false)
+  ..addAction(function initSpawners)

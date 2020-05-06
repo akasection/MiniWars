@@ -1,0 +1,21 @@
+package Earthcrack
+
+import ClosureEvents
+import ClosureTimers
+import InstantDummyCaster
+import OrderIds
+
+constant abilId = 'A000'
+constant dummyAbil = 'A001'
+
+init
+  EventListener.onCast(abilId) (unit caster) ->
+    doAfter(1.45) ->
+      InstantDummyCaster.castImmediate(
+        caster.getOwner(),
+        dummyAbil,
+        caster.getAbilityLevel(abilId),
+        OrderIds.stomp,
+        caster.getPos()
+      )
+

@@ -1,0 +1,57 @@
+package RaceSpawner
+
+import ClosureTimers
+
+constant LIMIT_FOOD = udg_foodMax
+
+public tuple bound(real low, real high)
+public tuple PayloadBridge(vec2 origin, vec2 destination, integer count, player owner, integer unitId)
+
+// bridge scope
+PayloadBridge bridge
+
+
+
+public class RaceSpawner
+  trigger runner
+  integer unitId
+  player owner
+  vec2 origin
+  vec2 destination
+  integer count
+  private CallbackSingle cycleBack
+
+  construct(integer unitId, player owner, bound range, vec2 origin, vec2 destination, integer count)
+    this.unitId = unitId
+    this.owner = owner
+    this.origin = origin
+    this.destination = destination
+    this.count = count
+
+    startCycle(range)
+
+  function startCycle(bound range)
+    this.cycleBack = doAfter(GetRandomReal(range.low, range.high)) ->
+      spawnUnits()
+      startCycle(range)
+
+  function stopCycle()
+    destroy cycleBack
+    cycleBack = null
+
+  function spawnUnits()
+    if this.owner.getCurrentSupply() >= LIMIT_FOOD
+      return
+    let facing = this.origin.angleTo(this.destination)
+    for i = 1 to this.count
+      let lcu = createUnit(this.owner, this.unitId, this.origin, facing)
+      lcu.setMana(1000)
+      lcu.issuePointOrder("attack", this.destination)
+      lcu.setMana(lcu.getMaxMana())
+  function forceSpawn()
+    spawnUnits()
+
+  ondestroy
+    destroy cycleBack
+
+

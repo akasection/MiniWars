@@ -7,15 +7,11 @@ constant force orcForce = GetPlayersAllies(Player(0))
 constant force humanForce = GetPlayersAllies(Player(1))
 
 function cameraInit()
-  orcForce.forEach(() -> begin
+  orcForce.forEach() () ->
     SetCameraPositionLocForPlayer(GetEnumPlayer(), orcLoc)
-    // PanCameraToTimedLocForPlayer(GetEnumPlayer(), orcLoc, 0.01)
-  end)
 
-  humanForce.forEach(() -> begin
+  humanForce.forEach() () ->
     SetCameraPositionLocForPlayer(GetEnumPlayer(), humanLoc)
-    // PanCameraToTimedLocForPlayer(GetEnumPlayer(), humanLoc, 0.01)
-  end)
 
   orcForce.destr()
   humanForce.destr()
