@@ -4,3 +4,6 @@ wurst.dependencies
 temp/output.j
 compiled.j.txt
 wurst/war3map.j
+
+node_modules/
+temp/
