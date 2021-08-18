@@ -1,0 +1,12 @@
+{
+  "name": "mini-wars",
+  "version": "1.0.0",
+  "description": "Mini Wars",
+  "main": "index.js",
+  "author": "SECTION <akasection@outlook.com>",
+  "license": "MIT",
+  "scripts": {
+    "build": "grill build ./MiniWars.w3x",
+    "install": "grill install"
+  }
+}

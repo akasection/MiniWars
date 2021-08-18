@@ -1,0 +1,24 @@
+package Distrust
+
+import ClosureEvents
+import ClosureForGroups
+import ClosureTimers
+
+constant DISTRUST = 'A007'
+constant AOE_FX = ""
+constant DURATION = 8.
+constant FX_RADIUS = [250., 275., 325.]
+constant DAMAGE = [30. , 65., 100.]
+
+init
+  EventListener.onTargetCast(DISTRUST) (unit caster, unit target) ->
+    let level = caster.getAbilityLevel(DISTRUST)
+    doPeriodicallyTimed(1., DURATION) (CallbackCounted cb) ->
+      if not target.isAlive()
+        cb.stop()
+      else
+        forUnitsInRange(target.getPos(), FX_RADIUS[level]) (unit u) ->
+          if u.isEnemyOf(caster.getOwner()) and u.isAlive() and not u.isType(UNIT_TYPE_STRUCTURE) and not u == target
+            caster.damageTarget(u, DAMAGE[level], false, true, ATTACK_TYPE_MAGIC, DAMAGE_TYPE_MAGIC, WEAPON_TYPE_WHOKNOWS)
+            flashEffect(AOE_FX, u, "head")
+

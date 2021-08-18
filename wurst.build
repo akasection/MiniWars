@@ -1,5 +1,6 @@
 ---
 projectName: MiniWars
+dependencies: []
 buildMapData:
   name: Mini Wars
   fileName: MiniWars

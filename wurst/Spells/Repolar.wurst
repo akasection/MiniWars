@@ -10,5 +10,4 @@ init
   EventListener.onCast(abilId) (unit caster) ->
     forUnitsInRange(caster.getPos(), abilAoe[caster.getAbilityLevel(abilId) - 1]) (unit u) ->
       if (not u.isType(UNIT_TYPE_STRUCTURE)) and u.isEnemyOf(caster.getOwner()) and u.isAlive()
-        print(u.getName() + " is targeted")
         u.setPos(caster.getPos())
