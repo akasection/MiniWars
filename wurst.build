@@ -1,6 +1,7 @@
 ---
 projectName: MiniWars
-dependencies: []
+dependencies:
+- https://github.com/wurstscript/wurstStdlib2
 buildMapData:
   name: Mini Wars
   fileName: MiniWars
