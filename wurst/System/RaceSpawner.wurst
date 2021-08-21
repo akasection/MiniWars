@@ -10,8 +10,6 @@ public tuple PayloadBridge(vec2 origin, vec2 destination, integer count, player 
 // bridge scope
 PayloadBridge bridge
 
-
-
 public class RaceSpawner
   trigger runner
   integer unitId
@@ -44,12 +42,9 @@ public class RaceSpawner
       return
     let facing = this.origin.angleTo(this.destination)
     for i = 1 to this.count
-      let lcu = createUnit(this.owner, this.unitId, this.origin, facing)
-      lcu.setMana(1000)
-      lcu.issuePointOrder("attack", this.destination)
-      lcu.setMana(lcu.getMaxMana())
-  function forceSpawn()
-    spawnUnits()
+      createUnit(this.owner, this.unitId, this.origin, facing)
+        ..setMana(1000)
+        ..issuePointOrder("attack", this.destination)
 
   ondestroy
     destroy cycleBack

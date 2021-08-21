@@ -1,0 +1,16 @@
+package Banish
+
+import ClosureEvents
+import ClosureForGroups
+import InstantDummyCaster
+
+constant abilId = 'AHbn'
+constant banishSpellId = 'A005'
+constant aoeSize = 275.
+
+init
+  EventListener.onTargetCast(abilId) (unit caster, unit target) ->
+    let cPlayer = caster.getOwner()
+    forUnitsInRange(target.getPos(), aoeSize) (unit u) ->
+      if u.isEnemyOf(cPlayer) and not u.isHidden()
+        InstantDummyCaster.castTarget(cPlayer, banishSpellId, caster.getAbilityLevel(abilId), "banish", u, u.getPos())
