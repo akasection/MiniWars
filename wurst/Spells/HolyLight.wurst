@@ -10,9 +10,9 @@ constant AOE_RADIUS = 300.
 
 init
   EventListener.onTargetCast(HOLY_LIGHT) (unit caster, unit target) ->
+    let damage = 300. * (caster.getAbilityLevel(HOLY_LIGHT))
     flashEffect(TARGET_FX, target.getPos())
     forUnitsInRange(target.getPos(), AOE_RADIUS) (unit u) ->
       if u.isEnemyOf(caster.getOwner()) and u.isAlive() and not u.isType(UNIT_TYPE_STRUCTURE)
-        caster.damageTarget(u, 300. * (caster.getAbilityLevel(HOLY_LIGHT)), false, true, ATTACK_TYPE_MAGIC, DAMAGE_TYPE_DIVINE, WEAPON_TYPE_WHOKNOWS)
+        caster.damageTarget(u, damage, false, true, ATTACK_TYPE_MAGIC, DAMAGE_TYPE_DIVINE, WEAPON_TYPE_WHOKNOWS)
         flashEffect(AOE_FX, u.getPos())
-
