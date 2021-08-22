@@ -1,0 +1,14 @@
+package KillingText
+
+constant duration = 10.
+
+function heroCheck() returns boolean
+  return IsUnitType(GetDyingUnit(), UNIT_TYPE_HERO) == true
+
+init
+  CreateTrigger()
+  ..registerAnyUnitEvent(EVENT_PLAYER_UNIT_DEATH)
+  ..addCondition(Condition(function heroCheck))
+  ..addAction() ->
+    let msg = EventData.getDyingUnit().getName() + " has killed " + EventData.getKillingUnit().getName()
+    printTimed(msg, duration)

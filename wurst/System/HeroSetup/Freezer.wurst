@@ -1,0 +1,8 @@
+package Freezer
+
+import ClosureForGroups
+
+init
+  forUnitsAll() (unit u) ->
+    if u.isType(UNIT_TYPE_HERO)
+      u.setInvulnerable(true)

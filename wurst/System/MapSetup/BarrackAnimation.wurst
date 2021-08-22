@@ -1,0 +1,8 @@
+package BarrackAnimation
+
+init
+  CreateTrigger()
+  ..registerTimerEvent(3., true)
+  ..addAction() ->
+    SetUnitAnimation( gg_unit_hbar_0004, "work" )
+    SetUnitAnimation( gg_unit_obar_0005, "work" )

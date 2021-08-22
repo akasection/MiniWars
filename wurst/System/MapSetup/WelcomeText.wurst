@@ -1,0 +1,8 @@
+package WelcomeText
+
+constant message = "Please select one of these heroes to play with."
+init
+  CreateTrigger()
+  ..registerTimerEvent(1., false)
+  ..addAction() ->
+    print(message, 35.)

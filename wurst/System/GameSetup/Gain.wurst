@@ -1,0 +1,11 @@
+package Gain
+
+init
+  for selPlayer in GetPlayersAll()
+    SetPlayerHandicap(selPlayer, 100.)
+    SetPlayerHandicapXP(selPlayer, 105.)
+    selPlayer.setState(PLAYER_STATE_GIVES_BOUNTY, 1)
+
+  for i = 0 to 1
+    SetPlayerHandicap(Player(i), 117.)
+    SetPlayerHandicapXP(Player(i), 0.)
