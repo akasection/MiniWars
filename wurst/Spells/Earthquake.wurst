@@ -1,0 +1,32 @@
+package Earthquake
+
+import HashMap
+
+constant earthQuake = 'AOeq'
+constant dummy = 'ewsp'
+constant dpsAbil = 'A006'
+constant manager = new HashMap<trigger, string>
+
+function cond() returns boolean
+  return EventData.getSpellAbilityId() == earthQuake
+
+
+init
+  CreateTrigger()
+  ..registerAnyUnitEvent(EVENT_PLAYER_UNIT_SPELL_CHANNEL)
+  ..addCondition(Condition(function cond))
+  ..addAction() ->
+    let trig = CreateTrigger()
+    let caster = EventData.getSpellAbilityUnit()
+    let dummyCaster = createUnit(caster.getOwner(), dummy, EventData.getSpellTargetPos(), (270.).fromDeg())
+    ..setVertexColor(colorA(255, 255, 255, 0))
+    ..addAbility(dpsAbil)
+    manager.saveUnit(trig.getHandleId(), dummyCaster)
+    trig
+    ..registerUnitEvent(caster, EVENT_UNIT_SPELL_ENDCAST)
+    ..registerUnitEvent(caster, EVENT_UNIT_SPELL_FINISH)
+    ..addCondition(Condition(function cond))
+    ..addAction() ->
+      let g = GetTriggeringTrigger()
+      manager.loadUnit(g.getHandleId()).remove()
+      g.destr()
