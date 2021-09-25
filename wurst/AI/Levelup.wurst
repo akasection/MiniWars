@@ -1,0 +1,33 @@
+package Levelup
+
+import LinkedList
+import ClosureEvents
+
+public class Levelup
+  int heroId
+  LinkedList<int> techTree
+  EventListener trig
+
+  construct(int id)
+    techTree = new LinkedList<int>()
+    heroId = id
+
+  function addTree(vararg int trees)
+    for i in trees
+      techTree.push(i)
+
+  function syncAbils(unit u)
+    print(u.getName() + " level up")
+    let curPoint = u.getSkillPoints()
+    for int i = 1 to curPoint
+      let skill = techTree.dequeue()
+      print(GetObjectName(skill) + " taken to level " + (u.getAbilityLevel(skill) + 1).toString())
+      u.selectSkill(skill)
+
+  function create()
+    trig = EventListener.add(EVENT_PLAYER_HERO_LEVEL) ->
+      let u = EventData.getLevelingUnit()
+      let cond = u.getOwner().getController() == MAP_CONTROL_COMPUTER and u.getTypeId() == this.heroId
+      if cond
+        syncAbils(u)
+

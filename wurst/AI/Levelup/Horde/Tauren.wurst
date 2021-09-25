@@ -1,0 +1,15 @@
+package Tauren
+
+import Levelup
+
+constant HERO_ID = 'Otch'
+
+constant ABIL_1 = 'AOsh'
+constant ABIL_2 = 'AOws'
+constant ABIL_3 = 'AOae'
+constant ABIL_ULTIMATE = 'AOre'
+
+init
+  new Levelup(HERO_ID)
+  ..addTree(ABIL_1, ABIL_2, ABIL_3, ABIL_1, ABIL_2, ABIL_3, ABIL_ULTIMATE, ABIL_1, ABIL_2, ABIL_3)
+  ..create()

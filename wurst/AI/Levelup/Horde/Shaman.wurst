@@ -1,0 +1,15 @@
+package Shaman
+
+import Levelup
+
+constant HERO_ID = 'Oshd'
+
+constant ABIL_1 = 'AOhw'
+constant ABIL_2 = 'AOhx'
+constant ABIL_3 = 'AOsw'
+constant ABIL_ULTIMATE = 'AOvd'
+
+init
+  new Levelup(HERO_ID)
+  ..addTree(ABIL_1, ABIL_3, ABIL_1, ABIL_3, ABIL_1, ABIL_ULTIMATE, ABIL_3, ABIL_2, ABIL_2, ABIL_2)
+  ..create()

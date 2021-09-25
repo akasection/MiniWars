@@ -1,0 +1,14 @@
+package MountainKing
+
+import Levelup
+
+constant HERO_ID = 'Hmkg'
+constant ABIL_1 = 'AHhb'
+constant ABIL_2 = 'AHtc'
+constant ABIL_3 = 'AHbh'
+constant ABIL_ULTIMATE = 'AHav'
+
+init
+  new Levelup(HERO_ID)
+  ..addTree(ABIL_1, ABIL_2, ABIL_1, ABIL_3, ABIL_2, ABIL_ULTIMATE, ABIL_1, ABIL_3, ABIL_3, ABIL_2)
+  ..create()

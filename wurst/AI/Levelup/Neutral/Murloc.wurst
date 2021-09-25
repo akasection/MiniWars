@@ -1,0 +1,15 @@
+package Murloc
+
+import Levelup
+
+constant HERO_ID = 'Nmsr'
+
+constant ABIL_1 = 'AEsh' // Shadow Strike
+constant ABIL_2 = 'ANwm' // Watery Minion
+constant ABIL_3 = 'AEar' // Trueshot Aura
+constant ABIL_ULTIMATE = 'AEsf' // Starfall
+
+init
+  new Levelup(HERO_ID)
+  ..addTree(ABIL_2, ABIL_1, ABIL_2, ABIL_3, ABIL_2 , ABIL_ULTIMATE, ABIL_1, ABIL_1, ABIL_3, ABIL_3)
+  ..create()

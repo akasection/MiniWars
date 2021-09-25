@@ -1,0 +1,15 @@
+package NagaSea
+
+import Levelup
+
+constant HERO_ID = 'Nngs'
+
+constant ABIL_1 = 'ANfl'
+constant ABIL_2 = 'ANfa'
+constant ABIL_3 = 'ANms'
+constant ABIL_ULTIMATE = 'ANto'
+
+init
+  new Levelup(HERO_ID)
+  ..addTree(ABIL_1, ABIL_2, ABIL_1, ABIL_2, ABIL_1 , ABIL_2, ABIL_3, ABIL_3, ABIL_ULTIMATE, ABIL_3)
+  ..create()

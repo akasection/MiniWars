@@ -1,0 +1,15 @@
+package Tinker
+
+import Levelup
+
+constant HERO_ID = 'Ntin'
+
+constant ABIL_1 = 'ANsy'
+constant ABIL_2 = 'ANcs'
+constant ABIL_3 = 'ANeg'
+constant ABIL_ULTIMATE = 'ANrg'
+
+init
+  new Levelup(HERO_ID)
+  ..addTree(ABIL_1, ABIL_2, ABIL_3, ABIL_2, ABIL_1, ABIL_ULTIMATE, ABIL_3, ABIL_1, ABIL_2, ABIL_3)
+  ..create()

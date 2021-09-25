@@ -3,7 +3,10 @@ package Freezer
 import ClosureForGroups
 
 init
-  forUnitsAll() (unit u) ->
-    if u.isType(UNIT_TYPE_HERO)
-      u.setInvulnerable(true)
-      u.pause()
+  CreateTrigger()
+  ..registerTimerEvent(0.05, false)
+  ..addAction() ->
+    forUnitsAll() (unit u) ->
+      if u.isType(UNIT_TYPE_HERO)
+        u.setInvulnerable(true)
+        u.pause()

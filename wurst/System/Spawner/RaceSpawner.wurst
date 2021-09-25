@@ -2,7 +2,7 @@ package RaceSpawner
 
 import ClosureTimers
 
-constant LIMIT_FOOD = udg_foodMax
+constant LIMIT_FOOD = 180
 
 public tuple bound(real low, real high)
 public tuple PayloadBridge(vec2 origin, vec2 destination, integer count, player owner, integer unitId)

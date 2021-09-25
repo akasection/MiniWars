@@ -1,0 +1,15 @@
+package DarkKnight
+
+import Levelup
+
+constant HERO_ID = 'Hlgr'
+
+constant ABIL_1 = 'A000'
+constant ABIL_2 = 'A002'
+constant ABIL_3 = 'A003'
+constant ABIL_ULTIMATE = 'A004'
+
+init
+  new Levelup(HERO_ID)
+  ..addTree(ABIL_1, ABIL_2, ABIL_1, ABIL_3, ABIL_2, ABIL_ULTIMATE, ABIL_1, ABIL_2, ABIL_3, ABIL_3)
+  ..create()

@@ -1,11 +1,14 @@
 package Gain
 
+constant HANDICAP_MODIFIER = 1.17
+constant XP_MODIFIER = 1.05
+
 init
   for selPlayer in GetPlayersAll()
     SetPlayerHandicap(selPlayer, 1.)
-    SetPlayerHandicapXP(selPlayer, 1.05)
+    SetPlayerHandicapXP(selPlayer, XP_MODIFIER)
     selPlayer.setState(PLAYER_STATE_GIVES_BOUNTY, 1)
 
   for i = 0 to 1
-    SetPlayerHandicap(Player(i), 1.17)
+    SetPlayerHandicap(Player(i), HANDICAP_MODIFIER)
     SetPlayerHandicapXP(Player(i), 0.)
