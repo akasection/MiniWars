@@ -1,0 +1,41 @@
+package Selector
+
+constant PLAYER_ARMY_HORDE = Player(0)
+constant PLAYER_ARMY_ALLIANCE = Player(1)
+constant boolean array heroSelectFlag = []
+
+public vec2 humanLoc = gg_rct_LeftRegion.getCenter()
+public vec2 orcLoc = gg_rct_RightRegion.getCenter()
+
+public function selectorCondition() returns boolean
+  let selUnit = GetTriggerUnit()
+  let ownerChecked = selUnit.getOwner() == PLAYER_ARMY_ALLIANCE or selUnit.getOwner() == PLAYER_ARMY_HORDE or selUnit.getOwner() == Player(PLAYER_NEUTRAL_PASSIVE)
+  return selUnit.isType(UNIT_TYPE_HERO) and ownerChecked
+
+public function playerFilter() returns boolean
+  let f = GetFilterPlayer()
+  let playingState = f.getSlotState() == PLAYER_SLOT_STATE_PLAYING
+  let noLeader = f != PLAYER_ARMY_ALLIANCE and f != PLAYER_ARMY_HORDE
+  return playingState and noLeader
+
+function player.getLoc() returns vec2
+  return (this.isAllyOf(PLAYER_ARMY_ALLIANCE) ? humanLoc : orcLoc)
+
+init
+  let allPlayer = GetPlayersMatching(Condition(function playerFilter))
+  for f in allPlayer
+    CreateTrigger()
+    ..registerPlayerUnitEvent(f, EVENT_PLAYER_UNIT_SELECTED, null)
+    ..addCondition(Condition(function selectorCondition))
+    ..addAction() ->
+      let selPlayer = GetTriggerPlayer()
+      // Takeover
+      GetTriggerUnit()
+      ..setOwner(selPlayer, true)
+      ..setInvulnerable(false)
+      ..unpause()
+      ..issuePointOrder("move", selPlayer.getLoc())
+
+      // DestroyTrigger
+      GetTriggeringTrigger().destr()
+

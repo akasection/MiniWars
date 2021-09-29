@@ -1,0 +1,31 @@
+package HeroPick
+
+import ClosureTimers
+import Selector
+
+constant PICK_DELAY = 3.
+
+function heroFilter() returns boolean
+  let u = GetFilterUnit()
+  let p = GetTriggerPlayer()
+  return u.isType(UNIT_TYPE_HERO) and u.isPaused() and p.hasVisibility(u)
+
+function advancedPlayerFilter() returns boolean
+  return playerFilter() and GetFilterPlayer().getController() == MAP_CONTROL_COMPUTER
+init
+  // CreateTrigger()
+  // ..registerAnyUnitEvent(EVENT_PLAYER_UNIT_SELECTED)
+  // ..addCondition(Condition(function heroFilter))
+  // ..addAction() ->
+  doAfter(PICK_DELAY) ->
+    let f = GetPlayersMatching(Condition(function advancedPlayerFilter))
+    f.forEach() ->
+      let p = GetEnumPlayer()
+      let heroes = GetUnitsInRectMatching(GetPlayableMapRect(), Condition(function heroFilter))
+      let picked = heroes.getRandom()
+      p.select(picked)
+      print(p.getName() + " picked " + picked.getName())
+      heroes.destr()
+
+    f.destr()
+

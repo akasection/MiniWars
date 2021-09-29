@@ -2,13 +2,14 @@ package GenericOrcSpawner
 
 import RaceSpawner
 import HashMap
+import Selector
 
 public HashMap<integer, RaceSpawner> orcSpawners = new HashMap<integer, RaceSpawner>
 
 function initSpawners()
   let orc = Player(0)
-  let origin = vec2(GetLocationX(udg_orcLoc), GetLocationY(udg_orcLoc))
-  let destination = vec2(GetLocationX(udg_humanLoc), GetLocationY(udg_humanLoc))
+  let origin = orcLoc
+  let destination = humanLoc
 
   /* Spawner registration */
   // Grunt

@@ -1,17 +1,16 @@
 package CameraPanStart
 
-constant location humanLoc = udg_humanLoc
-constant location orcLoc = udg_orcLoc
+import Selector
 
 constant force orcForce = GetPlayersAllies(Player(0))
 constant force humanForce = GetPlayersAllies(Player(1))
 
 function cameraInit()
   orcForce.forEach() () ->
-    SetCameraPositionLocForPlayer(GetEnumPlayer(), orcLoc)
+    GetEnumPlayer().setCameraPosition(orcLoc)
 
   humanForce.forEach() () ->
-    SetCameraPositionLocForPlayer(GetEnumPlayer(), humanLoc)
+    GetEnumPlayer().setCameraPosition(orcLoc)
 
   orcForce.destr()
   humanForce.destr()
