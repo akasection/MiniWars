@@ -3,6 +3,8 @@ package Levelup
 import LinkedList
 import ClosureEvents
 
+constant DEBUG = false
+
 public class Levelup
   int heroId
   LinkedList<int> techTree
@@ -17,11 +19,13 @@ public class Levelup
       techTree.push(i)
 
   function syncAbils(unit u)
-    print(u.getName() + " level up")
+    if DEBUG
+      printTimed(u.getName() + " level up", 5.)
     let curPoint = u.getSkillPoints()
     for int i = 1 to curPoint
       let skill = techTree.dequeue()
-      print(GetObjectName(skill) + " taken to level " + (u.getAbilityLevel(skill) + 1).toString())
+      if DEBUG
+        printTimed(GetObjectName(skill) + " taken to level " + (u.getAbilityLevel(skill) + 1).toString(), 5.)
       u.selectSkill(skill)
 
   function create()

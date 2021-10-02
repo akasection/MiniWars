@@ -6,7 +6,7 @@ import ClosureForGroups
 import Selector
 import OrderIds
 
-constant DEBUG = true
+constant DEBUG = false
 
 function unit.advanceRegularAttack()
   if this.getCurrentOrder() == Orders.stop or this.getCurrentOrder() == 0
@@ -89,7 +89,6 @@ public class AIRunner
           allyRisk += u.getFoodUsed()
       else
         skip
-    // printTimed("ally: "+ allyRisk.toString(), 1.1)
     return allyRisk
 
   function scanNearbyEnemies() returns real
@@ -111,7 +110,6 @@ public class AIRunner
           foeRisk += u.getFoodUsed()
       else
         skip
-    // printTimed("foe: "+ foeRisk.toString(), 1.1)
     return foeRisk
 
   function runAI()
@@ -127,8 +125,7 @@ public class AIRunner
 
     EventListener.add(hero, EVENT_PLAYER_UNIT_DEATH) ->
       if DEBUG
-        skip
-        // printTimed(hero.getName() + " ded" , 1.)
+        printTimed(hero.getName() + " ded" , 1.)
 
     EventListener.onCast(hero) (int id) ->
       if DEBUG
@@ -198,7 +195,8 @@ public class AIRunner
         else
           prioritizeNearbyHero()
 
-      printTimed(hero.getName() + " - " + state + " | risk: " + risk.toString() + " | damage: " + damageTaken.toString() + " | loss ratio: " + lossRatio.toString(), 2.)
+      if DEBUG
+        printTimed(hero.getName() + " - " + state + " | risk: " + risk.toString() + " | damage: " + damageTaken.toString() + " | loss ratio: " + lossRatio.toString(), 2.)
       // reset modifier
       allyModifier = 1.0
       foeModifier = 1.0

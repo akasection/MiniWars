@@ -5,7 +5,7 @@ import HashMap
 import Selector
 import BasicAI
 
-constant PICK_DELAY = 30.
+constant PICK_DELAY = 42.
 
 public IterableMap<player, AIRunner> computer = new IterableMap<player, AIRunner>
 
