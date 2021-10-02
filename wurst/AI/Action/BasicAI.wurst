@@ -1,0 +1,206 @@
+package BasicAI
+
+import ClosureEvents
+import ClosureTimers
+import ClosureForGroups
+import Selector
+import OrderIds
+
+constant DEBUG = true
+
+function unit.advanceRegularAttack()
+  if this.getCurrentOrder() == Orders.stop or this.getCurrentOrder() == 0
+    this.issuePointOrderById(Orders.attack, this.getOwner().getTargetLoc())
+
+public class AIRunner
+  unit hero
+  real storedDamage = 0
+  real allyModifier = 1.0 // this value can be higher when confidence is high.
+  real foeModifier = 1.0 // this value can be higher when debuffed.
+
+  real allyRange = 900
+  real foeRange = 1200
+
+  real allyRisk = 0.
+  real foeRisk = 0.
+
+  string state = ""
+
+  construct(unit wHero)
+    hero = wHero
+    runAI()
+
+  function getLifeLoss() returns real
+    // TODO: 0 okay, 1 regular damaged, 2 blown damage, 3 fatal damage
+    let curLoss = storedDamage
+    storedDamage = 0
+    // also flush storedDamage
+    return curLoss
+
+  function getNearestHero() returns unit
+    unit curHero = null
+    real hpTest = 99999.
+    forUnitsInRange(hero.getPos(), foeRange, true) (unit u) ->
+      if u.isEnemyOf(hero.getOwner()) and u.isAlive() and not u.isHidden() and u.isType(UNIT_TYPE_HERO) and u.getHP() < hpTest
+        curHero = u
+        hpTest = u.getHP()
+    return curHero
+
+  function prioritizeNearbyHero()
+    // TODO: 0 okay, 1 regular damaged, 2 blown damage, 3 fatal damage
+
+    // if no hero nearby, just do as usual
+    state = "hunting"
+    hero.advanceRegularAttack()
+
+  function chaseNearbyHero()
+    // TODO: chaseHero forces
+    // if no hero nearby, just business as usual
+    state = "chase"
+    hero.advanceRegularAttack()
+
+  function prioritizeBuilding()
+    skip
+
+  function smallRetreat()
+    state = "backoff"
+    let heroPos = hero.getPos()
+    let offset = heroPos.polarOffset(heroPos.angleTo(hero.getOwner().getLoc()), 900.)
+    hero.issuePointOrderById(Orders.move, offset)
+
+  function bigRetreat()
+    // TODO: used when health is under 10%, or 50% damage taken in just 2 seconds,
+    // try to reach healing point, or even back to barracks (to buy something)
+    state = "retreat"
+    hero.issuePointOrderById(Orders.move, hero.getOwner().getLoc())
+
+  function scanNearbyAllies() returns real
+    // Range considered to flat 1200 for now
+    // TODO: returns decision whether big wave, or small wave
+    // scale from 0, to infinity. unit based on food. heroes counted as 1.2 + (level * 0.4)
+    allyRisk = 0
+    forUnitsInRange(hero.getPos(), allyRange, true) (unit u) ->
+      if u.isAllyOf(hero.getOwner()) and u.isAlive() and not u.isType(UNIT_TYPE_STRUCTURE) and not u.isHidden()
+        if u.isIllusion()
+          allyRisk += 1
+        else if u.isType(UNIT_TYPE_HERO)
+          allyRisk += 1.2 + (u.getLevel() * 0.4)
+        else
+          allyRisk += u.getFoodUsed()
+      else
+        skip
+    // printTimed("ally: "+ allyRisk.toString(), 1.1)
+    return allyRisk
+
+  function scanNearbyEnemies() returns real
+    // Note: Only counts visible
+    // Range considered to flat 1600 for now
+    // TODO: returns decision whether big wave, or small wave
+    // scale from 0, to infinity. unit based on food. heroes counted as 1.2 + (level * 0.4)
+    // adds self life as risk
+    foeRisk = 0
+    forUnitsInRange(hero.getPos(), foeRange, true) (unit u) ->
+      if u.isEnemyOf(hero.getOwner()) and u.isAlive() and not u.isHidden()
+        if not hero.getOwner().hasVisibility(u)
+          skip
+        else if u.isType(UNIT_TYPE_STRUCTURE)
+          foeRisk += 12
+        else if u.isType(UNIT_TYPE_HERO)
+          foeRisk += 1.2 + (u.getLevel() * 0.4)
+        else
+          foeRisk += u.getFoodUsed()
+      else
+        skip
+    // printTimed("foe: "+ foeRisk.toString(), 1.1)
+    return foeRisk
+
+  function runAI()
+    EventListener.add(hero, EVENT_UNIT_DAMAGED) ->
+      // Stack the damage value
+      let curDamage = EventData.getEventDamage()
+      storedDamage += curDamage
+
+      // TODO: instantly retreat when current life is instantly under 10% or 200
+      let threshold = max(hero.getHP() / hero.getMaxHP(), 200. / hero.getMaxHP())
+      if threshold <= 0.15
+        bigRetreat()
+
+    EventListener.add(hero, EVENT_PLAYER_UNIT_DEATH) ->
+      if DEBUG
+        skip
+        // printTimed(hero.getName() + " ded" , 1.)
+
+    EventListener.onCast(hero) (int id) ->
+      if DEBUG
+        printTimed(hero.getName() + " casts " + GetAbilityName(id) , 5.)
+
+    CreateTrigger()
+    ..registerUnitEvent(hero, EVENT_UNIT_HERO_REVIVE_FINISH)
+    ..addAction() ->
+      // reset modifier
+      let hero = EventData.getTriggerUnit()
+      hero.advanceRegularAttack()
+      if DEBUG
+        printTimed(hero.getName() + " revived", 1.)
+    EventListener.add(hero, EVENT_PLAYER_UNIT_USE_ITEM) ->
+      skip
+      if DEBUG
+        printTimed(hero.getName() + " used Item", 1.)
+
+    doPeriodically(1.75) (CallbackPeriodic cb) ->
+      let arisk = scanNearbyAllies()
+      let frisk = scanNearbyEnemies()
+      let lifeRatio = hero.getHP() / hero.getMaxHP()
+      foeModifier += (1 - Pow(lifeRatio, 1.5))
+      let risk = (frisk * foeModifier) - (arisk * allyModifier) // if higher than 0 than considered risky
+      let damageTaken = getLifeLoss()
+      let lossRatio = damageTaken / hero.getMaxHP()
+      if lossRatio >= 0.35
+        // retreat
+        if risk >= 20
+          bigRetreat()
+        else
+          smallRetreat()
+        skip
+      else if lossRatio >= 0.15
+        // if risk is high, stop/do not chase and advance standard strategy
+        if risk >= 24
+          state = "retreat"
+          bigRetreat()
+        else if risk >= 12
+          smallRetreat()
+        else if risk >= 0
+          state = "advance"
+          hero.advanceRegularAttack()
+        else
+          prioritizeNearbyHero()
+      else if lossRatio >= 0.08
+        if risk >= 38
+          smallRetreat()
+        else if risk >= 12
+          state = "advance"
+          hero.advanceRegularAttack()
+        else if risk >= 0
+          prioritizeNearbyHero()
+        else
+          chaseNearbyHero()
+      else
+        if risk >= 24
+          if lifeRatio <= 0.2
+            bigRetreat()
+          else
+            state = "advance"
+            hero.advanceRegularAttack()
+        // Prioritizes hero, wipe remaining
+        else if risk >= 0
+          state = "advance"
+          hero.advanceRegularAttack()
+        else
+          prioritizeNearbyHero()
+
+      printTimed(hero.getName() + " - " + state + " | risk: " + risk.toString() + " | damage: " + damageTaken.toString() + " | loss ratio: " + lossRatio.toString(), 2.)
+      // reset modifier
+      allyModifier = 1.0
+      foeModifier = 1.0
+
+

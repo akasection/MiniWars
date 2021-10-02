@@ -18,8 +18,23 @@ public function playerFilter() returns boolean
   let noLeader = f != PLAYER_ARMY_ALLIANCE and f != PLAYER_ARMY_HORDE
   return playingState and noLeader
 
-function player.getLoc() returns vec2
+public function player.getLoc() returns vec2
   return (this.isAllyOf(PLAYER_ARMY_ALLIANCE) ? humanLoc : orcLoc)
+
+public function player.getTargetLoc() returns vec2
+  return (this.isAllyOf(PLAYER_ARMY_ALLIANCE) ? orcLoc : humanLoc)
+
+public function player.pickHero(unit u)
+  let selPlayer = this
+  let loc = selPlayer.getLoc()
+  // Takeover
+  u
+  ..setOwner(selPlayer, true)
+  ..setInvulnerable(false)
+  ..unpause()
+  ..setPos(loc)
+  selPlayer.panCameraTo(loc)
+  print(selPlayer.getName() + " picked " + u.getName())
 
 init
   let allPlayer = GetPlayersMatching(Condition(function playerFilter))
@@ -28,14 +43,7 @@ init
     ..registerPlayerUnitEvent(f, EVENT_PLAYER_UNIT_SELECTED, null)
     ..addCondition(Condition(function selectorCondition))
     ..addAction() ->
-      let selPlayer = GetTriggerPlayer()
-      // Takeover
-      GetTriggerUnit()
-      ..setOwner(selPlayer, true)
-      ..setInvulnerable(false)
-      ..unpause()
-      ..issuePointOrder("move", selPlayer.getLoc())
-
+      GetTriggerPlayer().pickHero(EventData.getTriggerUnit())
       // DestroyTrigger
       GetTriggeringTrigger().destr()
 

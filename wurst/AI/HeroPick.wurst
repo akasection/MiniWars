@@ -1,30 +1,30 @@
 package HeroPick
 
 import ClosureTimers
+import HashMap
 import Selector
+import BasicAI
 
-constant PICK_DELAY = 3.
+constant PICK_DELAY = 30.
+
+public IterableMap<player, AIRunner> computer = new IterableMap<player, AIRunner>
 
 function heroFilter() returns boolean
   let u = GetFilterUnit()
-  let p = GetTriggerPlayer()
+  let p = GetEnumPlayer()
   return u.isType(UNIT_TYPE_HERO) and u.isPaused() and p.hasVisibility(u)
 
 function advancedPlayerFilter() returns boolean
   return playerFilter() and GetFilterPlayer().getController() == MAP_CONTROL_COMPUTER
 init
-  // CreateTrigger()
-  // ..registerAnyUnitEvent(EVENT_PLAYER_UNIT_SELECTED)
-  // ..addCondition(Condition(function heroFilter))
-  // ..addAction() ->
   doAfter(PICK_DELAY) ->
     let f = GetPlayersMatching(Condition(function advancedPlayerFilter))
     f.forEach() ->
       let p = GetEnumPlayer()
       let heroes = GetUnitsInRectMatching(GetPlayableMapRect(), Condition(function heroFilter))
       let picked = heroes.getRandom()
-      p.select(picked)
-      print(p.getName() + " picked " + picked.getName())
+      p.pickHero(picked)
+      computer.put(p, new AIRunner(picked))
       heroes.destr()
 
     f.destr()

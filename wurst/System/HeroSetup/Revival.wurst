@@ -11,18 +11,17 @@ constant ALLIANCE = Player(1)
 init
   EventListener.add(EVENT_PLAYER_UNIT_DEATH) ->
     let u = EventData.getDyingUnit()
-    if not u.isType(UNIT_TYPE_HERO)
-      skip
-    let loc = u.getOwner().isAllyOf(ALLIANCE) ? humanLoc : orcLoc
-    let t = getTimer()
-    let td = t.createTimerDialog()
-    td.display(false)
-    td.setTitle("Respawn")
-    if GetLocalPlayer() == u.getOwner()
-      td.display(true)
-    t.doAfter(RESPAWN_TIME) ->
-      u.revive(loc, true)
-      u.setMana(u.getMaxMana())
-      td.destr()
-
-
+    if u.isType(UNIT_TYPE_HERO)
+      let msg = EventData.getKillingUnit().getName() + " has killed " + u.getName()
+      printTimed(msg, 10.)
+      let loc = u.getOwner().isAllyOf(ALLIANCE) ? humanLoc : orcLoc
+      let t = getTimer()
+      let td = t.createTimerDialog()
+      td.display(false)
+      td.setTitle("Respawn")
+      if GetLocalPlayer() == u.getOwner()
+        td.display(true)
+      t.doAfter(RESPAWN_TIME) ->
+        u.revive(loc, true)
+        u.setMana(u.getMaxMana())
+        td.destr()

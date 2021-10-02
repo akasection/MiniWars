@@ -4,7 +4,7 @@ import RaceSpawner
 import HashMap
 import Selector
 
-public HashMap<integer, RaceSpawner> orcSpawners = new HashMap<integer, RaceSpawner>
+public IterableMap<integer, RaceSpawner> orcSpawners = new IterableMap<integer, RaceSpawner>
 
 function initSpawners()
   let orc = Player(0)

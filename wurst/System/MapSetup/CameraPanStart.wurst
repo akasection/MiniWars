@@ -10,7 +10,7 @@ function cameraInit()
     GetEnumPlayer().setCameraPosition(orcLoc)
 
   humanForce.forEach() () ->
-    GetEnumPlayer().setCameraPosition(orcLoc)
+    GetEnumPlayer().setCameraPosition(humanLoc)
 
   orcForce.destr()
   humanForce.destr()

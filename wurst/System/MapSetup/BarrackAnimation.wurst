@@ -1,8 +1,16 @@
 package BarrackAnimation
 
+import ClosureTimers
+import ClosureForGroups
+
+unit uhbar
+unit uobar
+
 init
-  CreateTrigger()
-  ..registerTimerEvent(3., true)
-  ..addAction() ->
-    SetUnitAnimation( gg_unit_hbar_0004, "work" )
-    SetUnitAnimation( gg_unit_obar_0005, "work" )
+  forUnitsOfType("hbar") (unit u) ->
+    uhbar = u
+  forUnitsOfType("obar") (unit u) ->
+    uobar = u
+  doPeriodically(3.) (CallbackPeriodic cb) ->
+    uhbar.setAnimation("work")
+    uobar.setAnimation("work")

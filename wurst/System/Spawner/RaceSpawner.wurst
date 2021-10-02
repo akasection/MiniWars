@@ -1,7 +1,8 @@
 package RaceSpawner
 
 import ClosureTimers
-
+import ClosureEvents
+import Orders
 constant LIMIT_FOOD = 180
 
 public tuple bound(real low, real high)
@@ -18,6 +19,8 @@ public class RaceSpawner
   vec2 destination
   integer count
   private CallbackSingle cycleBack
+  private CallbackPeriodic noStopCycle
+  group wave = CreateGroup()
 
   construct(integer unitId, player owner, bound range, vec2 origin, vec2 destination, integer count)
     this.unitId = unitId
@@ -27,6 +30,8 @@ public class RaceSpawner
     this.count = count
 
     startCycle(range)
+    cleanupDeaths()
+    noStop()
 
   function startCycle(bound range)
     this.cycleBack = doAfter(GetRandomReal(range.low, range.high)) ->
@@ -37,16 +42,29 @@ public class RaceSpawner
     destroy cycleBack
     cycleBack = null
 
+  function noStop()
+    noStopCycle = doPeriodically(5.) (CallbackPeriodic cb) ->
+      wave.pointOrderById(Orders.attack, this.destination)
+
+
   function spawnUnits()
     if this.owner.getCurrentSupply() >= LIMIT_FOOD
       return
     let facing = this.origin.angleTo(this.destination)
     for i = 1 to this.count
-      createUnit(this.owner, this.unitId, this.origin, facing)
+      let u = createUnit(this.owner, this.unitId, this.origin, facing)
         ..setMana(1000)
         ..issuePointOrder("attack", this.destination)
+      wave.add(u)
+
+  function cleanupDeaths()
+    EventListener.add(EVENT_PLAYER_UNIT_DEATH) ->
+      let u = EventData.getDyingUnit()
+      if wave.has(u)
+        wave.remove(u)
 
   ondestroy
     destroy cycleBack
+    wave.destr()
 
 

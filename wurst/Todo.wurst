@@ -1,0 +1,39 @@
+// TODO:  Mercenary Recruit System
+
+// sewa extra creep buat keluar di wave
+
+// unik, ga boleh ada di 2 tim
+// 24 mercenary
+
+// TODO: Skill point via separated xp
+
+// TODO: Powerup
+
+// Powerup upgrade ally
+
+// TODO: Micro-scale Items
+
+// ga boleh item nambah stat agi/int/str
+// ga boleh item eksplisit flat nambahin armor/attack
+// item harus utility (castable item/aura/passive)
+// ga boleh orb effect
+// item unik, ga boleh ada di dua tim
+
+// 24 item
+
+// TODO: No-fountain (but restore system)
+// moon well system?
+
+// recall 6 sec, terus freeze 6 sec
+// moon well
+
+// TODO: Scaled Respawn
+
+// variable level
+// handicap
+
+// TODO: Upgradables System
+
+// nambah agi int str attack armor
+// ngurangin respawn, extra stat hp mp aspd mspd
+// ga di slot item
