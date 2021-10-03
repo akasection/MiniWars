@@ -71,6 +71,7 @@ public class AIRunner
   function bigRetreat()
     // TODO: used when health is under 10%, or 50% damage taken in just 2 seconds,
     // try to reach healing point, or even back to barracks (to buy something)
+    // in addition, use escaping spells (like wind walk or blink)
     state = "retreat"
     hero.issuePointOrderById(Orders.move, hero.getOwner().getLoc())
 
