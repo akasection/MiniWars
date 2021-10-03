@@ -1,6 +1,7 @@
 package DarkRanger
 
 import Levelup
+import LinkedList
 
 constant HERO_ID = 'Nbrn'
 
@@ -10,6 +11,6 @@ constant ABIL_3 = 'ANdr'
 constant ABIL_ULTIMATE = 'ANch'
 
 init
-  new Levelup(HERO_ID)
-  ..addTree(ABIL_2, ABIL_3, ABIL_2, ABIL_3, ABIL_3, ABIL_ULTIMATE, ABIL_2, ABIL_1, ABIL_1, ABIL_1)
-  ..create()
+  let techtree = new LinkedList<integer>
+  techtree.add(ABIL_2, ABIL_3, ABIL_2, ABIL_3, ABIL_3, ABIL_ULTIMATE, ABIL_2, ABIL_1, ABIL_1, ABIL_1)
+  levelTable.put(HERO_ID, techtree)

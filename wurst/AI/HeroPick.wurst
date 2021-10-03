@@ -4,10 +4,14 @@ import ClosureTimers
 import HashMap
 import Selector
 import BasicAI
+import Levelup
 
 constant PICK_DELAY = 42.
 
 public IterableMap<player, AIRunner> computer = new IterableMap<player, AIRunner>
+public IterableMap<player, Levelup> levelLogic = new IterableMap<player, Levelup>
+
+
 
 function heroFilter() returns boolean
   let u = GetFilterUnit()
@@ -25,6 +29,11 @@ init
       let picked = heroes.getRandom()
       p.pickHero(picked)
       computer.put(p, new AIRunner(picked))
+      let lvl = new Levelup(picked)
+        ..syncAbils(picked)
+        ..create()
+      levelLogic.put(p, lvl)
+
       heroes.destr()
 
     f.destr()

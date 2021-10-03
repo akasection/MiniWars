@@ -1,6 +1,7 @@
 package Pitlord
 
 import Levelup
+import LinkedList
 
 constant HERO_ID = 'Nplh'
 
@@ -10,6 +11,6 @@ constant ABIL_3 = 'ANht'
 constant ABIL_ULTIMATE = 'ANdo'
 
 init
-  new Levelup(HERO_ID)
-  ..addTree(ABIL_1, ABIL_3, ABIL_1, ABIL_2, ABIL_1, ABIL_ULTIMATE, ABIL_2, ABIL_3, ABIL_3, ABIL_2)
-  ..create()
+  let techtree = new LinkedList<integer>
+  techtree.add(ABIL_1, ABIL_3, ABIL_1, ABIL_2, ABIL_1, ABIL_ULTIMATE, ABIL_2, ABIL_3, ABIL_3, ABIL_2)
+  levelTable.put(HERO_ID, techtree)

@@ -1,6 +1,7 @@
 package Paladin
 
 import Levelup
+import LinkedList
 
 constant HERO_ID = 'Hpal'
 constant ABIL_1 = 'AHhb'
@@ -9,6 +10,6 @@ constant ABIL_3 = 'AHad'
 constant ABIL_ULTIMATE = 'AHre'
 
 init
-  new Levelup(HERO_ID)
-  ..addTree(ABIL_1, ABIL_3, ABIL_1, ABIL_2, ABIL_1, ABIL_ULTIMATE, ABIL_2, ABIL_3, ABIL_3, ABIL_2)
-  ..create()
+  let techtree = new LinkedList<integer>
+  techtree.add(ABIL_1, ABIL_3, ABIL_1, ABIL_2, ABIL_1, ABIL_ULTIMATE, ABIL_2, ABIL_3, ABIL_3, ABIL_2)
+  levelTable.put(HERO_ID, techtree)

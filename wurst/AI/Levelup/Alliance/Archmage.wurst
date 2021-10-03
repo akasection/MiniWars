@@ -1,6 +1,7 @@
 package Archmage
 
 import Levelup
+import LinkedList
 
 constant HERO_ID = 'Hamg'
 
@@ -10,6 +11,6 @@ constant ABIL_3 = 'AHab'
 constant ABIL_ULTIMATE = 'AHmt'
 
 init
-  new Levelup(HERO_ID)
-  ..addTree(ABIL_1, ABIL_2, ABIL_1, ABIL_3, ABIL_2, ABIL_ULTIMATE, ABIL_1, ABIL_2, ABIL_3, ABIL_3)
-  ..create()
+  let techtree = new LinkedList<integer>
+  techtree.add(ABIL_1, ABIL_2, ABIL_1, ABIL_3, ABIL_2, ABIL_ULTIMATE, ABIL_1, ABIL_2, ABIL_3, ABIL_3)
+  levelTable.put(HERO_ID, techtree)

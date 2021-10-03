@@ -2,21 +2,21 @@ package Levelup
 
 import LinkedList
 import ClosureEvents
+import HashMap
 
 constant DEBUG = false
 
+public HashMap<integer, LinkedList<integer>> levelTable = new HashMap<integer, LinkedList<integer>>
+
 public class Levelup
-  int heroId
-  LinkedList<int> techTree
+  LinkedList<integer> techTree
   EventListener trig
+  unit hero
 
-  construct(int id)
-    techTree = new LinkedList<int>()
-    heroId = id
-
-  function addTree(vararg int trees)
-    for i in trees
-      techTree.push(i)
+  construct(unit hero)
+    this.hero = hero
+    // assign default techtree
+    techTree = levelTable.get(hero.getTypeId())
 
   function syncAbils(unit u)
     if DEBUG
@@ -29,9 +29,6 @@ public class Levelup
       u.selectSkill(skill)
 
   function create()
-    trig = EventListener.add(EVENT_PLAYER_HERO_LEVEL) ->
-      let u = EventData.getLevelingUnit()
-      let cond = u.getOwner().getController() == MAP_CONTROL_COMPUTER and u.getTypeId() == this.heroId
-      if cond
-        syncAbils(u)
+    trig = EventListener.add(hero, EVENT_PLAYER_HERO_LEVEL) ->
+      syncAbils(hero)
 
